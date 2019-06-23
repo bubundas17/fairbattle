@@ -3,7 +3,7 @@ const router = express.Router()
 const Match = require('../../models/Match')
 const User = require('../../models/User')
 
-const libTransition = require('../../lib/libTransition')
+const libTransition = require('../../lib/libTransactions')
 const authenticated = require('../../controllers/authenticated')
 
 // TODO: implement authentication

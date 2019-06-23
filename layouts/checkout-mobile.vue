@@ -1,28 +1,5 @@
 <template>
   <v-app>
-    <v-navigation-drawer
-      v-model="drawer"
-      temporary
-      right
-      app
-    >
-      <v-list>
-        <v-list-tile
-          v-for="(item, i) in items"
-          :to="item.to"
-          :key="i"
-          router
-          exact
-        >
-          <v-list-tile-action>
-            <v-icon v-html="item.icon"/>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-toolbar-title v-text="item.title" class="ml-2"/>
-          </v-list-tile-content>
-        </v-list-tile>
-      </v-list>
-    </v-navigation-drawer>
     <v-toolbar
       fixed
       app
@@ -49,7 +26,7 @@
       <nuxt/>
     </v-content>
     <v-footer>
-      <span class="px-2">eTournaments &copy;2019</span>
+      <span class="px-2">SolidTorrents.net &copy;2018</span> <v-spacer/> <nuxt-link to="/about" :class="darkMode ? 'white--text': ''" class="px-2">About Us</nuxt-link> | <nuxt-link to="/donate" class="px-2" :class="darkMode ? 'white--text': ''">Donate</nuxt-link> | <nuxt-link to="/dmca" class="px-2" :class="darkMode ? 'white--text': ''">DMCA</nuxt-link> | <nuxt-link class="px-2" :class="darkMode ? 'white--text': ''" to="/privacy">Privacy Policy</nuxt-link>
     </v-footer>
   </v-app>
 </template>
@@ -65,19 +42,22 @@
       return {
         drawer: false,
         items: [
-          {icon: 'mdi-home', title: 'Home', to: '/'},
-          {icon: 'mdi-gamepad-variant', title: 'Join Matches', to: '/matches'},
-          {icon: 'mdi-music-note', title: 'Music', to: '/categories/music'},
-          {icon: 'mdi-book', title: 'eBooks', to: '/categories/ebook'}
+          {icon: 'home', title: 'Home', to: '/'},
+          {icon: 'videocam', title: 'Videos', to: '/categories/videos'},
+          {icon: 'music_note', title: 'Music', to: '/categories/music'},
+          {icon: 'book', title: 'eBooks', to: '/categories/ebook'}
         ],
         miniVariant: false,
         right: true,
         rightDrawer: false,
-        title: 'Fair Tournaments'
+        title: 'Solid Torrents'
       }
     },
     methods: {},
     computed: {
+      isLoading() {
+        return this.$store.state.loading.loading
+      }
     },
     transition (to, from) {
       if (!from) return 'slide-left'

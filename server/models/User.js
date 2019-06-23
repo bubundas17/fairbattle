@@ -3,7 +3,7 @@ let mongoose = require('mongoose')
 let Schema = mongoose.Schema({
   username: { type: String, unique: true, index: 1 },
   phone: { type: Number, unique: true, index: 1, required: true },
-  email: { type: String, index: 1 },
+  email: { type: String, index: 1, required: true },
   name: { type: String },
   credits: { type: Number, default: 0 },
   kills: { type: Number, default: 0 },

@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const User = require('../../models/User')
 const libsms = require('../../lib/libsms')
-const libTxn = require('../../lib/libTransition')
+const libTxn = require('../../lib/libTransactions')
 const bcrypt = require('bcryptjs')
 
 // TODO:Implement Authentication
@@ -22,7 +22,7 @@ router.get('/:id', async (req, res) => {
     let user = await User.findById(req.params.id)
     res.send({ user })
   } catch (e) {
-    res.state(400).send({ message: 'Failed To Retrieve User' })
+    res.status(400).send({ message: 'Failed To Retrieve User' })
   }
 })
 

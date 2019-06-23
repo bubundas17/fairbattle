@@ -1,5 +1,5 @@
 let User = require('../models/User')
-let Transitions = require('../models/Transitions')
+let Transitions = require('../models/Transactions')
 
 module.exports = {
   create(UserId, amount, title, note, status = 1, now = true) {
