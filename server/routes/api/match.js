@@ -5,8 +5,8 @@ const User = require('../../models/User')
 
 const libTransition = require('../../lib/libTransactions')
 const authenticated = require('../../controllers/authenticated')
+const admin = require('../../controllers/admin')
 
-// TODO: implement authentication
 router.get('/', authenticated, async (req, res) => {
   let status = req.query.status
   let participated = req.query.participated
@@ -39,7 +39,7 @@ router.get('/', authenticated, async (req, res) => {
 })
 
 
-router.post('/', async (req, res) => {
+router.post('/', admin, async (req, res) => {
   let data = req.body
   try {
     let match = await Match.create(data)
@@ -50,7 +50,7 @@ router.post('/', async (req, res) => {
   }
 })
 
-router.put('/:id', authenticated, async (req, res) => {
+router.put('/:id', admin, async (req, res) => {
   let data = req.body
   let id = req.params.id
 
@@ -79,7 +79,7 @@ router.get('/:id', authenticated, async (req, res) => {
   }
 })
 
-router.post('/:id/docredits', async (req, res) => {
+router.post('/:id/docredits', admin, async (req, res) => {
   let id = req.params.id
   try {
     let match = await Match.findById(id)
@@ -126,7 +126,7 @@ router.post('/:id/docredits', async (req, res) => {
   }
 })
 
-router.post('/:id/cancel', async (req, res) => {
+router.post('/:id/cancel', admin, async (req, res) => {
   let data = req.body
   let id = req.params.id
   try {
@@ -138,7 +138,7 @@ router.post('/:id/cancel', async (req, res) => {
   }
 })
 
-router.post('/:id/sendnotification', async (req, res) => {
+router.post('/:id/sendnotification',admin, async (req, res) => {
   let data = req.body
   let id = req.params.id
   try {
