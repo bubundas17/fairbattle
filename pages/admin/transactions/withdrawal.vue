@@ -11,7 +11,7 @@
       </v-card-title>
       <v-card-text>
         <v-list>
-          <v-list-tile v-for="transaction in transactions" :to="`/admin/transactions/${ transaction._id }`">
+          <v-list-tile v-for="transaction in transactions" :to="`/admin/transactions/${ transaction._id }`" :key="transaction._id">
             {{transaction.title}} - {{transaction.user.username}}
           </v-list-tile>
         </v-list>

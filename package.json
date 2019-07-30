@@ -1,5 +1,5 @@
 {
-  "name": "etournaments",
+  "name": "fairbattle",
   "version": "1.0.0",
   "description": "My mathematical Nuxt.js project",
   "author": "Bubun Das",
@@ -11,7 +11,7 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
-    "@mdi/font": "^3.6.95",
+    "@mdi/font": "^3.8.95",
     "@nuxtjs/axios": "^5.3.6",
     "@nuxtjs/pwa": "^2.6.0",
     "bcryptjs": "^2.4.3",

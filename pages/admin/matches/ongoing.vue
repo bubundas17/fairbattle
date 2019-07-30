@@ -20,18 +20,12 @@
 
 <script>
   export default {
-    name: 'index',
+    name: 'ongoing',
     layout: 'admin',
     async asyncData({ app }) {
-      let matches = (await app.$axios.$get('/matches')).matches
+      let matches = (await app.$axios.$get('/matches', {params: { status: 2 }})).matches
       return {
         matches
-      }
-    },
-    methods: {
-      async reload(){
-        let matches = (await app.$axios.$get('/matches')).matches
-        this.methods =  methods;
       }
     }
   }

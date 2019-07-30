@@ -13,7 +13,7 @@ module.exports = {
     key: process.env.PAYTM_MERCHANT_KEY
   },
   refer: {
-    PER_REFER: 10, // Default value per refer
+    PER_REFER: 15, // Default value per refer
     NEW_USER_REFER_CREDIT: 5 // Amount To be credited to new user if signed up via promo link.
   }
 }

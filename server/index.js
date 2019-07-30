@@ -42,7 +42,10 @@ async function start() {
   app.use(bodyParser.urlencoded())
   app.use(routes)
   app.use(nuxt.render)
-
+  app.use("/admin", (req, res, next) => {
+    res.spa = true
+    next(req, res, next)
+  })
   // Listen the server
   app.listen(port, host)
   consola.ready({

@@ -9,7 +9,7 @@ const admin = require('../../controllers/admin')
 
 
 
-router.get('/',admin, async (req, res) => {
+router.get('/', admin, async (req, res) => {
   try {
     let users = await User.find({})
     res.send({ users })

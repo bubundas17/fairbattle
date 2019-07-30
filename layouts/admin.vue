@@ -27,6 +27,7 @@
               v-for="subItem in item.items"
               :key="subItem.title"
               :to="subItem.to"
+              exact
             >
               <v-list-tile-content>
                 <v-list-tile-title>{{ subItem.title }}</v-list-tile-title>
@@ -43,7 +44,7 @@
             :to="item.to"
           >
             <v-list-tile-action>
-              <v-icon >{{ item.action }}</v-icon>
+              <v-icon>{{ item.action }}</v-icon>
             </v-list-tile-action>
             <v-list-tile-content>
               <v-list-tile-title>{{ item.title }}</v-list-tile-title>
@@ -65,10 +66,10 @@
       <v-toolbar-items>
       </v-toolbar-items>
       <v-toolbar-items class="hidden-sm-and-down">
-<!--        <v-btn flat v-for="item in items" :to="item.to" :key="item.title">-->
-<!--          <v-icon left>{{item.icon}}</v-icon>-->
-<!--          {{item.title}}-->
-<!--        </v-btn>-->
+        <!--        <v-btn flat v-for="item in items" :to="item.to" :key="item.title">-->
+        <!--          <v-icon left>{{item.icon}}</v-icon>-->
+        <!--          {{item.title}}-->
+        <!--        </v-btn>-->
         <LoginDialog v-if="!isLoggedIn"/>
         <ProfileDialog v-if="isLoggedIn"/>
       </v-toolbar-items>
@@ -81,62 +82,81 @@
 </template>
 
 <script>
-  import Alerts from "../components/Alerts";
-  import LoginDialog from "../components/LoginDialog";
-  import ProfileDialog from "../components/ProfileDialog";
+  import Alerts from '../components/Alerts'
+  import LoginDialog from '../components/LoginDialog'
+  import ProfileDialog from '../components/ProfileDialog'
 
   export default {
-    components: {Alerts, LoginDialog, ProfileDialog},
+    components: { Alerts, LoginDialog, ProfileDialog },
+    middleware: 'loggedin',
     data() {
       return {
-        searchKeyword: "",
+        searchKeyword: '',
         drawer: true,
         items: [
           {
             action: 'pages',
             title: 'Dashboard',
             nested: false,
-            to: "/admin"
+            to: '/admin'
           }, {
-            action: 'mdi-alert-octagon',
+            action: 'mdi-account-circle',
             title: 'User',
             nested: true,
             items: [
-              {title: 'User', to: "/admin/users"},
-              {title: 'Add User', to: "/admin/users/new"},
+              { title: 'All Users', to: '/admin/users' },
+              { title: 'Add User', to: '/admin/users/new' }
             ]
           },
 
           {
-            action: 'mdi-alert-octagon',
+            action: 'mdi-google-play',
             title: 'Matches',
             nested: true,
             items: [
-              {title: 'Matches', to: "/admin/matches"},
-              {title: 'New', to: "/admin/matches/new"},
-              {title: 'Future Matches', to: "/admin/reports/active"},
-              {title: 'Ongoing Matches', to: "/admin/reports/completed"},
-              {title: 'Ended Matches', to: "/admin/reports/completed"},
+              { title: 'Create New', to: '/admin/matches/new' },
+              { title: 'All Matches', to: '/admin/matches/' },
+              { title: 'Future Matches', to: '/admin/matches/future' },
+              { title: 'Ongoing Matches', to: '/admin/matches/ongoing' }
             ]
           },
           {
-            action: 'mdi-alert-octagon',
+            action: 'mdi-format-list-bulleted-square',
             title: 'Transactions',
             nested: true,
             items: [
-              {title: 'Withdrawal Requests', to: "/admin/transactions/withdrawal"},
-              {title: 'TopUp Users', to: "/admin/transactions/topup"},
-              {title: 'Ongoing Matches', to: "/admin/reports/completed"},
-              {title: 'Ended Matches', to: "/admin/reports/completed"},
+              { title: 'Transactions', to: '/admin/transactions/' },
+              { title: 'TopUp Users', to: '/admin/transactions/topup' }
             ]
           },
-
+          {
+            action: 'mdi-wallet-giftcard',
+            title: 'Redeem',
+            nested: true,
+            items: [
+              { title: 'Redeem Methods', to: '/admin/redeem/methods' },
+              { title: 'Pending Requests', to: '/admin/redeem/pending' },
+              { title: 'All Requests', to: '/admin/redeem/' }
+            ]
+          },
+          {
+            action: 'mdi-wallet',
+            title: 'Fair Coin',
+            nested: true,
+            items: [
+              { title: 'Offers', to: '/admin/faircoin/' },
+              { title: 'Purchase History', to: '/admin/faircoin/history/' },
+            ]
+          },
           {
             action: 'settings',
             title: 'Settings',
-            nested: false,
-            to: "/"
-          },
+            nested: true,
+            items: [
+              { title: 'Main Settings', to: '/admin/settings/' },
+              { title: 'App Version', to: '/admin/settings/version/' },
+            ]
+          }
         ],
         miniVariant: false,
         right: true,
@@ -146,21 +166,21 @@
     },
     methods: {
       search() {
-        this.$router.push({path: '/search', query: {q: this.searchKeyword}})
+        this.$router.push({ path: '/search', query: { q: this.searchKeyword } })
       }
     },
     computed: {
       searchQ() {
         return this.$route.query.q
-      },
+      }
     },
     watch: {
       searchQ(value) {
-        this.searchKeyword = value;
+        this.searchKeyword = value
       }
     },
     mounted() {
-      this.searchKeyword = this.$route.query.q;
+      this.searchKeyword = this.$route.query.q
     }
   }
 </script>

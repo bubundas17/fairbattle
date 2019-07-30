@@ -12,7 +12,7 @@ module.exports = {
         let user = await User.findById(UserId)
         if (!user) return reject('User Not Found.')
         if (now) {
-          if ((amount < 0) && !(user.credits > Math.abs(Number(amount)))) return reject('User Do not have enough credits!')
+          if ((amount < 0) && !(user.credits >= Math.abs(Number(amount)))) return reject('User Do not have enough credits!')
           user.credits += Number(amount)
           user.save()
         }
