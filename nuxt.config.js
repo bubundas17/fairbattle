@@ -3,13 +3,15 @@ const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin')
 
 module.exports = {
   mode: 'universal',
-
+  serverMiddleware: [
+    '~/server-middleware/disable-ssr'
+  ],
   /*
   ** Headers of the page
   */
 
   head: {
-    title: pkg.name,
+    title: "Fairbattle | Play PUBG and earn Real Money.",
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -49,7 +51,8 @@ module.exports = {
     '@/plugins/mdi',
     '@/plugins/vee-validate',
     '@/plugins/datetime',
-    {src: '@/plugins/yimoeditor', ssr: false}
+    {src: '@/plugins/yimoeditor', ssr: false},
+    '@/plugins/client-init'
   ],
 
   /*
@@ -59,7 +62,7 @@ module.exports = {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
-    'nuxt-client-init-module'
+    // 'nuxt-client-init-module'
   ],
   /*
   ** Axios module configuration

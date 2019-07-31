@@ -1,5 +1,5 @@
 let User = require('../models/User')
-let Transitions = require('../models/Transitions')
+let Transitions = require('../models/Transactions')
 
 module.exports = {
   create(UserId, amount, title, note, status = 1, now = true) {
@@ -12,7 +12,7 @@ module.exports = {
         let user = await User.findById(UserId)
         if (!user) return reject('User Not Found.')
         if (now) {
-          if ((amount < 0) && !(user.credits > Math.abs(Number(amount)))) return reject('User Do not have enough credits!')
+          if ((amount < 0) && !(user.credits >= Math.abs(Number(amount)))) return reject('User Do not have enough credits!')
           user.credits += Number(amount)
           user.save()
         }

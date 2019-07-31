@@ -2,6 +2,7 @@ const express = require('express')
 const validator = require('validator')
 const router = express.Router()
 const User = require('../../models/User')
+const DeviceUUID = require('../../models/DeviceUUIDS')
 const Otp = require('../../models/Otp')
 const Onligr = require('../../lib/libsms')
 
@@ -11,7 +12,7 @@ const jwt = require('jsonwebtoken')
 const authenticated = require('../../controllers/authenticated')
 
 router.post('/signup', async (req, res) => {
-  let { username, email, name, password, otp, phone } = req.body
+  let { username, email, name, password, otp, phone, referral, uuid } = req.body
 
   // Validating
   if (!username) return res.status(400).json({ message: 'Please Enter Username' })
@@ -20,6 +21,20 @@ router.post('/signup', async (req, res) => {
   if (!password) return res.status(400).json({ message: 'Please Enter Password' })
   if (!otp) return res.status(400).json({ message: 'Please Enter OTP' })
   if (!phone || !validator.isMobilePhone(phone.toString(), ['en-IN'])) return res.status(400).json({ message: 'Please Enter Valid Phone Number' })
+  let referedBy = null
+
+  // Referral Logic
+  if(uuid){
+    try{
+      await DeviceUUID.create({uuid: uuid})
+      if (referral) {
+        referedBy = await User.findOne({ username: referral })
+        if (!referedBy) return res.status(400).json({ message: 'Invalid Referral Code.' })
+      }
+    }catch (e) {
+
+    }
+  }
 
 
   try {
@@ -37,7 +52,7 @@ router.post('/signup', async (req, res) => {
 
     let hashedpass = bcrypt.hashSync(password, 10)
     let userData = await User.create({
-      username, name, email, phone, password: hashedpass
+      username, name, email, phone, password: hashedpass, 'referral.referredBy': referedBy
     })
 
     let token = jwt.sign({
@@ -49,7 +64,7 @@ router.post('/signup', async (req, res) => {
       },
       config.jwtSecret, { expiresIn: '6h' })
 
-    res.cookie("authorization", "Bearer " + token)
+    res.cookie('authorization', 'Bearer ' + token)
 
     res.send({
       message: 'User SignUp Completed!',
@@ -68,6 +83,21 @@ router.post('/signup', async (req, res) => {
   }
 })
 
+router.get('/checkAvailability', async (req, res) => {
+  let { username, email, phone } = req.query
+  if (!(username || email || phone)) return res.status(400).send({
+    error: true,
+    message: 'One of following fields are required: username, email or phone.'
+  })
+
+  let data = await User.findOne(req.query)
+  data = !!data
+  res.send({
+    success: true,
+    used: data
+  })
+})
+
 router.get('/profile', authenticated, async (req, res) => {
   let user = await User.findById(req.user.id).select('-password')
   res.json({ user: user })
@@ -77,8 +107,8 @@ router.post('/login', async (req, res) => {
   let { username, password } = req.body
   let userData = await User.findOne({
     $or: [
-      {username: username},
-      {phone: parseInt(username)|| ''}
+      { username: username },
+      { phone: parseInt(username) || '' }
     ]
   })
 
@@ -92,7 +122,7 @@ router.post('/login', async (req, res) => {
       },
       config.jwtSecret, { expiresIn: '6h' })
 
-    res.cookie("authorization", "Bearer " + token)
+    res.cookie('authorization', 'Bearer ' + token)
 
     res.json({
       message: 'User Logged In!',

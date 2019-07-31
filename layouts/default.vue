@@ -39,7 +39,7 @@
           <v-icon left>{{item.icon}}</v-icon>
           {{item.title}}
         </v-btn>
-        <LoginDialog v-if="!isLoggedIn"/>
+<!--        <LoginDialog v-if="!isLoggedIn"/>-->
         <ProfileDialog v-if="isLoggedIn"/>
       </v-toolbar-items>
       <v-toolbar-side-icon @click="drawer = !drawer" class="hidden-md-and-up"/>
@@ -48,38 +48,46 @@
       <alerts></alerts>
       <nuxt/>
     </v-content>
-    <v-footer>
-      <span class="px-2">eTournaments &copy;2019</span>
+
+    <v-footer height="auto"  color="blue-grey darken-3" >
+      <v-layout justify-center row wrap >
+        <v-btn color="white" flat round to="/">HOME</v-btn>
+        <v-btn color="white" flat round to="/about">ABOUT US</v-btn>
+        <v-btn color="white" flat round to="/privacy-policy">PRIVACY POLICY</v-btn>
+        <v-btn color="white" flat round to="/terms-and-condition">TRAMS AND CONDITIONS</v-btn>
+        <v-btn color="white" flat round to="/refund-cancellation-policy">REFUND POLICY</v-btn>
+        <v-flex black lighten-2 py-3 text-xs-center white--text xs12>
+          &copy;2019 — <strong>FairBattle.net</strong>
+        </v-flex>
+      </v-layout>
     </v-footer>
   </v-app>
 </template>
 
 <script>
-  import Alerts from "../components/Alerts";
-  import LoginDialog from "../components/LoginDialog";
-  import ProfileDialog from "../components/ProfileDialog";
+  import Alerts from '../components/Alerts'
+  import LoginDialog from '../components/LoginDialog'
+  import ProfileDialog from '../components/ProfileDialog'
 
   export default {
-    components: {Alerts, LoginDialog, ProfileDialog},
+    components: { Alerts, LoginDialog, ProfileDialog },
     data() {
       return {
         drawer: false,
         items: [
-          {icon: 'home', title: 'Home', to: '/'},
-          {icon: 'mdi-gamepad-variant', title: 'Join Matches', to: '/matches'},
-          {icon: 'music_note', title: 'Music', to: '/categories/music'},
-          {icon: 'book', title: 'eBooks', to: '/categories/ebook'}
+          { icon: 'mdi-home', title: 'Home', to: '/' },
+          { icon: 'mdi-information', title: 'About', to: '/about' },
+          { icon: 'mdi-phone', title: 'Contact', to: '/contact' },
         ],
         miniVariant: false,
         right: true,
         rightDrawer: false,
-        title: 'Fair Tournaments'
+        title: 'Fair Battle'
       }
     },
     methods: {},
-    computed: {
-    },
-    transition (to, from) {
+    computed: {},
+    transition(to, from) {
       if (!from) return 'slide-left'
       return +to.query.page < +from.query.page ? 'slide-right' : 'slide-left'
     }

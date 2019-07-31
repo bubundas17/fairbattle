@@ -2,13 +2,14 @@ const express = require('express')
 const router = express.Router()
 const User = require('../../models/User')
 const libsms = require('../../lib/libsms')
-const libTxn = require('../../lib/libTransition')
+const libTxn = require('../../lib/libTransactions')
 const bcrypt = require('bcryptjs')
 
-// TODO:Implement Authentication
+const admin = require('../../controllers/admin')
 
 
-router.get('/', async (req, res) => {
+
+router.get('/', admin, async (req, res) => {
   try {
     let users = await User.find({})
     res.send({ users })
@@ -17,16 +18,16 @@ router.get('/', async (req, res) => {
   }
 })
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', admin, async (req, res) => {
   try {
     let user = await User.findById(req.params.id)
     res.send({ user })
   } catch (e) {
-    res.state(400).send({ message: 'Failed To Retrieve User' })
+    res.status(400).send({ message: 'Failed To Retrieve User' })
   }
 })
 
-router.put('/:id', async (req, res) => {
+router.put('/:id',admin, async (req, res) => {
   let body = req.body
   try {
     let user = await User.findByIdAndUpdate(req.params.id, { $set: body })
@@ -37,7 +38,7 @@ router.put('/:id', async (req, res) => {
   }
 })
 
-router.post('/:id/sendsms', async (req, res) => {
+router.post('/:id/sendsms', admin, async (req, res) => {
   let body = req.body
   try {
     let user = await User.findById(req.params.id)
@@ -49,7 +50,7 @@ router.post('/:id/sendsms', async (req, res) => {
   }
 })
 
-router.post('/:id/changepass', async (req, res) => {
+router.post('/:id/changepass', admin, async (req, res) => {
   let password = req.body.password
   let hash = bcrypt.hashSync(password, 10)
   try {
@@ -61,7 +62,7 @@ router.post('/:id/changepass', async (req, res) => {
   }
 })
 
-router.post('/:id/dotxn', async (req, res) => {
+router.post('/:id/dotxn',admin, async (req, res) => {
   let amount = req.body.amount
   let title = req.body.title
   let note = req.body.note

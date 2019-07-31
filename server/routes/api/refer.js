@@ -7,14 +7,20 @@ const UserDB = require("../../models/User")
 router.get('/', authenticated, async (req, res) => {
   try {
     let User = await req.userDoc().lean()
-    let leaderboard = await UserDB.find({}).sort({"referral.totalReferCredit": -1}).select("referral username").limit(50)
+    let leaderboard =  UserDB.find({}).sort({"referral.totalReferCredit": -1}).select("referral username").limit(50)
+    let totalReferred =  UserDB.find({"referral.referredBy": req.user.id}).count()
+    let totalCompletedRefer =  UserDB.find({"referral.referredBy": req.user.id, "referral.referCredited": true}).sort({"referral.totalReferCredit": -1}).count()
+    leaderboard =  await leaderboard
+    totalReferred =  await totalReferred
+    totalCompletedRefer =  await totalCompletedRefer
+
 
     res.send({
       leaderboard,
-      totalReferred: User.referral.totalReferred || 0,
-      totalCompletedRefer: User.referral.totalCompletedRefer || 0,
+      totalReferred: totalReferred || 0,
+      totalCompletedRefer: totalCompletedRefer || 0,
       totalReferCredit: User.referral.totalReferCredit || 0,
-      canRefer: User.permissions.canRefer,
+      canRefer: User.canRefer,
       perRefer: User.referral.perRefer || config.refer.PER_REFER,
       newUserCredit: config.refer.NEW_USER_REFER_CREDIT
     })

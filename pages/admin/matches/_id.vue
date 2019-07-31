@@ -85,7 +85,7 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer/>
-            <v-btn outline color="green">Save and Send Room Id</v-btn>
+            <v-btn outline color="green" @click="sendSmsNotificatopns">Save and Send Room Id</v-btn>
             <v-btn outline color="teal" @click="saveInfo">Save</v-btn>
           </v-card-actions>
         </v-card>
@@ -96,7 +96,7 @@
           <v-card-title>Actions</v-card-title>
           <v-card-actions>
             <v-spacer/>
-            <v-btn outline color="orange">Send Starting Reminder</v-btn>
+            <v-btn outline color="orange 7" @click="sendSmsNotificatopns">Send Starting Reminder</v-btn>
             <v-btn outline color="red">Cancel Match and refund</v-btn>
             <v-spacer/>
           </v-card-actions>
@@ -261,7 +261,14 @@
       },
       async doCredits(){
         await this.$axios.$post('/matches/' + this.$route.params.id  + "/docredits")
+        this.showAlert("success", "Sms Notifications sent!")
       },
+      async sendSmsNotificatopns(){
+        await this.saveInfo()
+        await this.$axios.$post('/matches/' + this.$route.params.id  + "/sendnotificationsms")
+        this.showAlert("success", "Sms Notifications sent!")
+      },
+
       async calculatePrizes() {
         let totalWinners = 0
         this.participated.map(data => data.won? totalWinners ++ : false)

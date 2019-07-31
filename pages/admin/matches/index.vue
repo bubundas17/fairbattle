@@ -23,9 +23,15 @@
     name: 'index',
     layout: 'admin',
     async asyncData({ app }) {
-      let matches = (await app.$axios.$get('/matches', {params: { status: 1}})).matches
+      let matches = (await app.$axios.$get('/matches')).matches
       return {
         matches
+      }
+    },
+    methods: {
+      async reload(){
+        let matches = (await app.$axios.$get('/matches')).matches
+        this.methods =  methods;
       }
     }
   }
