@@ -62,7 +62,9 @@ router.post('/signup', async (req, res) => {
         email: userData.email,
         admin: userData.admin
       },
-      config.jwtSecret, { expiresIn: '6h' })
+      config.jwtSecret,
+      // { expiresIn: '6h' }
+      )
 
     res.cookie('authorization', 'Bearer ' + token)
 
@@ -120,7 +122,9 @@ router.post('/login', async (req, res) => {
         email: userData.email,
         admin: userData.admin
       },
-      config.jwtSecret, { expiresIn: '6h' })
+      config.jwtSecret,
+      // { expiresIn: '6h' }
+      )
 
     res.cookie('authorization', 'Bearer ' + token)
 
@@ -147,7 +151,7 @@ router.post('/requestotp', async (req, res) => {
     await Otp.deleteMany({ phone: phone })
     let newOtp = getRandomArbitrary(10000, 99999)
     await Otp.create({ phone: phone, otp: newOtp })
-    await Onligr.sendSMS([phone], `${newOtp} is Your OTP for eTournaments. Do not Share it with anybody.`)
+    await Onligr.sendSMS([phone], `${newOtp} is Your OTP for Fair Battle. Do not Share it with anybody.`)
     res.send({ message: 'Otp Successfully Sent' })
   } catch (e) {
     console.log(e)
