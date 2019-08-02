@@ -166,7 +166,7 @@ router.post('/:id/join', authenticated, async (req, res) => {
   let user = req.user
   let id = req.params.id
   try {
-    if (pubgUsername) return res.status(400).send({ message: 'Please enter Your PUBG Username.' })
+    if (!pubgUsername) return res.status(400).send({ message: 'Please enter Your PUBG Username.' })
     let match = await Match.findById(id)
 
     alreadyJoined = match.participated.filter(data => String(data.user) === String(user.id)).length
