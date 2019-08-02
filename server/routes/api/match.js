@@ -180,7 +180,8 @@ router.post('/:id/join', authenticated, async (req, res) => {
 
     // if (match.isPaid) {
     // match is paid, Do the Transaction
-    if (match.isPaid) {
+    if (match.isPaid && match.entryFees) {
+
       try {
         await libReferral.doCredits(user.id)
       } catch (e) {
@@ -214,6 +215,7 @@ router.post('/:id/join', authenticated, async (req, res) => {
       match.joined++
       match.save()
     }
+    res.send('Thank you for joining this match!')
   } catch (e) {
     console.warn(e)
     res.status(400).send({ message: 'Something Went Wrong' })
