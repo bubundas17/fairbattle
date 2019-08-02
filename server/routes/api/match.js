@@ -166,6 +166,7 @@ router.post('/:id/join', authenticated, async (req, res) => {
   let user = req.user
   let id = req.params.id
   try {
+    if (pubgUsername) return res.status(400).send({ message: 'Please enter Your PUBG Username.' })
     let match = await Match.findById(id)
 
     alreadyJoined = match.participated.filter(data => String(data.user) === String(user.id)).length
@@ -173,7 +174,7 @@ router.post('/:id/join', authenticated, async (req, res) => {
 
     if (alreadyJoined) return res.status(400).send({ message: 'You are already in!' })
     if (pubg) return res.status(400).send({ message: 'The PUBG Username is already in!' })
-    if (!(match.maxPlayers > match.joined)) return res.status(400).send({ message: 'Match Is Full!' })
+    if (!(match.maxPlayers >= match.joined)) return res.status(400).send({ message: 'Match Is Full!' })
     if (match.status !== 1) return res.status(400).send({ message: 'Sorry, You Cannot Join This Match Now.' })
 
 

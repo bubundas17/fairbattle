@@ -6,7 +6,7 @@
 
             <div id="banner-text">
                 <h1>PLAY <span>PUBG</span> EARN <span>MONEY</span></h1>
-                <h2>54025 Peoples Already Got there Rewords!</h2>
+<!--                <h2>54025 Peoples Already Got there Rewords!</h2>-->
                 <h3>Now it's your turn</h3>
             </div>
         </div>
