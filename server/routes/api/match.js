@@ -144,8 +144,8 @@ router.post('/:id/sendnotificationsms', admin, async (req, res) => {
   // let data = req.body
   let id = req.params.id
   try {
-    let match = await Match.findById(id).populate("participated.user")
-      // match = match.toObject()
+    let match = await Match.findById(id).populate('participated.user')
+    // match = match.toObject()
     let numbers = match.participated.map(usr => {
 
       return usr.user.phone
@@ -180,33 +180,40 @@ router.post('/:id/join', authenticated, async (req, res) => {
 
     // if (match.isPaid) {
     // match is paid, Do the Transaction
-    try {
-      await libReferral.doCredits(user.id)
-    } catch (e) {
+    if (match.isPaid) {
+      try {
+        await libReferral.doCredits(user.id)
+      } catch (e) {
 
-    }
-    libTransition.create(user.id, -Number(match.entryFees), 'Match Joining Fees', `Joining Fees For ${match.name}, #${match.count}`)
-      .then(transaction => {
-        // If successful get the transaction id.
-        match.participated.push({
-          user: user.id,
-          transaction: transaction,
-          pubgUsername: pubgUsername
+      }
+
+      libTransition.create(user.id, -Number(match.entryFees), 'Match Joining Fees', `Joining Fees For ${match.name}, #${match.count}`)
+        .then(transaction => {
+          // If successful get the transaction id.
+          match.participated.push({
+            user: user.id,
+            transaction: transaction,
+            pubgUsername: pubgUsername
+          })
+          match.joined++
+          match.save()
+          // Done Now Referral Credit.
+
+
+          res.send('Thank you for joining this match!')
         })
-        match.joined++
-        match.save()
-        // Done Now Referral Credit.
-
-
-
-        res.send('Thank you for joining this match!')
+        .catch(error => {
+          console.warn(error)
+          res.status(400).send({ message: 'Sorry, You Don\'t have enough credits' })
+        })
+    } else {
+      match.participated.push({
+        user: user.id,
+        pubgUsername: pubgUsername
       })
-      .catch(error => {
-        console.warn(error)
-        res.status(400).send({ message: 'Sorry, You Don\'t have enough credits' })
-      })
-    // }
-    // res.send({ user })
+      match.joined++
+      match.save()
+    }
   } catch (e) {
     console.warn(e)
     res.status(400).send({ message: 'Something Went Wrong' })
