@@ -21,8 +21,8 @@ let Schema = mongoose.Schema({
   roomInfo: {type: String},
   participated: [
     {
-      user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', index: 1, required: true },
-      transaction: { type: mongoose.Schema.Types.ObjectId, ref: 'Transaction', index: 1, required: true },
+      user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', index: 1 },
+      transaction: { type: mongoose.Schema.Types.ObjectId, ref: 'Transaction', index: 1 },
       winingTransaction: { type: mongoose.Schema.Types.ObjectId, ref: 'Transaction', index: 1 },
       pubgUsername: { type: String, required: true },
       kills: { type: Number, default: 0},
